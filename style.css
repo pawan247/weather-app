@@ -39,7 +39,9 @@ body::-webkit-scrollbar {
     text-transform: uppercase;
     font-family: 'Inter', sans-serif;
     font-weight: 500;
-    font-size: 2.5rem;
+    font-size: 2.2rem;
+    margin-top: 1rem;
+
     color: rgb(56, 106, 125);
 }
 
@@ -575,7 +577,7 @@ body::-webkit-scrollbar {
 
     .other-location {
         width: 41%;
-        height: 32%;
+        height: 30%;
     }
 
     .notice {
@@ -653,7 +655,7 @@ body::-webkit-scrollbar {
 
     .other-location {
         width: 61%;
-        height: 40%;
+        height: 38%;
     }
 
     .searched-marker i {
@@ -790,7 +792,7 @@ body::-webkit-scrollbar {
 
     .other-location {
         width: 92%;
-        height: 40%;
+        height: 38%;
     }
 
     .notice {

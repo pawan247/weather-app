@@ -1,12 +1,12 @@
 
 window.addEventListener("load", () => {
 
-    document.querySelector("#loader1").style.display="block";
+    document.querySelector("#loader1").style.display = "block";
 
     let long;
     let lat;
 
-    if(navigator.geolocation){
+    if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition((position) => {
             long = position.coords.longitude;
             lat = position.coords.latitude;
@@ -14,13 +14,13 @@ window.addEventListener("load", () => {
             const api = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${long}&appid=78bcad0d429cad5887a2cef2e1c5d77e`;
 
             fetch(api)
-            .then((response) => {
-                return response.json();
-            })
-            .then(data => {
+                .then((response) => {
+                    return response.json();
+                })
+                .then(data => {
 
-                const toCelsius = Math.round(`${data.main.temp}`)- 273;
-                const currentWeather = `
+                    const toCelsius = Math.round(`${data.main.temp}`) - 273;
+                    const currentWeather = `
                 <div class="current-weather-info">
                     <p class="city-name">${data.name}, ${data.sys.country}</p>
                     <div class="img-and-temp">
@@ -30,12 +30,12 @@ window.addEventListener("load", () => {
                     <p class="weather-type">${data.weather[0].main}</p>
                 </div>`;
 
-                document.querySelector("#loader1").style.display="none";
-                document.querySelector(".responseData").innerHTML = currentWeather;
-                displaySearchWeather();
+                    document.querySelector("#loader1").style.display = "none";
+                    document.querySelector(".responseData").innerHTML = currentWeather;
+                    displaySearchWeather();
 
-            }) 
-            
+                })
+
         })
     }
 })
@@ -52,50 +52,55 @@ var loader3 = document.querySelector(".loaderBox3");
 
 addCity.addEventListener("click", () => {
 
-    modalBox.style.display="block";
-    inputContainer.style.transform="translateY(9vh)";
-    inputBox.style.display="flex";
+    modalBox.style.display = "block";
+    inputContainer.style.transform = "translateY(9vh)";
+    inputBox.style.display = "flex";
 });
 
-modalBox.addEventListener("click", () => { 
+modalBox.addEventListener("click", () => {
 
-    searchResults.style.display="none";
-    inputContainer.style.transform="translateY(-50vh)";
-    modalBox.style.display="none";
+    searchResults.style.display = "none";
+    inputContainer.style.transform = "translateY(-50vh)";
+    modalBox.style.display = "none";
     displaySearchWeather();
 });
 
 let submitCityInfo = (e) => {
 
     e.preventDefault();
-    
-    searchResults.style.display="none";
-    document.querySelector(".loaderBox2").style.display="flex";
+
+    searchResults.style.display = "none";
+    document.querySelector(".loaderBox2").style.display = "flex";
 
     let output = "";
 
     fetch(`https://fierce-castle-13645.herokuapp.com/weather?city=${cityInput.value}`)
-        .then(res => res.json())
+        .then(res => {
+            return res.json();
+        })
         .then(response => {
             cityInput.value = "";
             response.forEach((response) => {
-    
-                    output += `
+
+                output += `
                     <div class="cityItem" onclick="displaySearchWeather(setId(${response.id}))">
                         <i class="fas fa-map-marker-alt"></i>
                         <p class="city-and-country">${response.name}, ${response.country}</p>
                     </div>`;
 
             })
-            document.querySelector(".loaderBox2").style.display="none";
+            document.querySelector(".loaderBox2").style.display = "none";
             searchResults.innerHTML = output;
-            searchResults.style.display="flex";
+            searchResults.style.display = "flex";
         })
         .catch(err => {
 
-            document.querySelector(".loaderBox2").style.display="none";
-            searchResults.style.display="flex";
-            document.querySelector(".error").style.display="block";
+            searchResults.innerHTML = "";
+            document.querySelector(".loaderBox2").style.display = "none";
+            searchResults.style.display = "flex";
+            searchResults.innerHTML = '<p class="error">City Not Found</p>';
+            document.querySelector(".error").style.display = "block";
+        
         });
 }
 
@@ -103,46 +108,46 @@ inputBox.addEventListener("submit", submitCityInfo);
 
 // SETTING UP LOCAL STORAGE FOR IDS
 
-function setId(id){
+function setId(id) {
 
-    if(localStorage.getItem("id") === null){
+    if (localStorage.getItem("id") === null) {
         localStorage.setItem("id", "[]");
     }
-    
+
     var id_value = [...JSON.parse(localStorage.getItem("id"))];
     id_value.push(id);
-    
+
     localStorage.setItem("id", JSON.stringify(id_value));
 
     // CLOSING THE MODAL
 
-    searchResults.style.display="none";
-    inputContainer.style.transform="translateY(-50vh)";
-    modalBox.style.display="none";
+    searchResults.style.display = "none";
+    inputContainer.style.transform = "translateY(-50vh)";
+    modalBox.style.display = "none";
 }
 
 
-async function displaySearchWeather(){
+async function displaySearchWeather() {
 
-    if(localStorage.getItem("id") === null){
+    if (localStorage.getItem("id") === null) {
 
-        document.querySelector(".notice").style.display="block";
-       
-    }else{
+        document.querySelector(".notice").style.display = "block";
 
-        document.querySelector(".search-location-list").style.display="none";
-        loader3.style.display="block";
+    } else {
+
+        document.querySelector(".search-location-list").style.display = "none";
+        loader3.style.display = "block";
 
         let id_value = [...JSON.parse(localStorage.getItem("id"))];
         let getWeatherInfo = "";
 
         //Looping fetch api using id
 
-        for(let i = 0; i < id_value.length; i++){
+        for (let i = 0; i < id_value.length; i++) {
             let resp = await fetch(`https://api.openweathermap.org/data/2.5/weather?id=${id_value[i]}&appid=78bcad0d429cad5887a2cef2e1c5d77e`);
             let data = await resp.json();
-    
-            let toCelsius = Math.round(`${data.main.temp}`)- 273;
+
+            let toCelsius = Math.round(`${data.main.temp}`) - 273;
 
             getWeatherInfo += `
             <div class="searched-city-item">
@@ -161,9 +166,9 @@ async function displaySearchWeather(){
             </div>`;
 
         }
-        
-        loader3.style.display="none";
-        document.querySelector(".search-location-list").style.display="block";
+
+        loader3.style.display = "none";
+        document.querySelector(".search-location-list").style.display = "block";
         document.querySelector(".search-location-list").innerHTML = getWeatherInfo;
     }
 
