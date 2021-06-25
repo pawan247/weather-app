@@ -47,20 +47,22 @@ var inputContainer = document.querySelector(".input-container");
 var inputBox = document.querySelector(".inputBox");
 var cityInput = document.getElementById("cityInput");
 var searchResults = document.querySelector(".searchCityItems");
+var loader3 = document.querySelector(".loaderBox3");
 
 
 addCity.addEventListener("click", () => {
 
     modalBox.style.display="block";
-    inputContainer.style.transform="translateY(7vh)";
+    inputContainer.style.transform="translateY(9vh)";
     inputBox.style.display="flex";
 });
 
 modalBox.addEventListener("click", () => { 
-    displaySearchWeather();
+
     searchResults.style.display="none";
     inputContainer.style.transform="translateY(-50vh)";
     modalBox.style.display="none";
+    displaySearchWeather();
 });
 
 let submitCityInfo = (e) => {
@@ -123,16 +125,13 @@ function setId(id){
 async function displaySearchWeather(){
 
     if(localStorage.getItem("id") === null){
-        document.querySelector(".loader-and-notice").style.display="block";
-        document.getElementById("loader3").style.display="none";
-        document.querySelector(".savedLocationNotice").style.display="block";
+
+        document.querySelector(".notice").style.display="block";
        
     }else{
 
-        document.querySelector(".loader-and-notice").style.display="block";
-        document.querySelector(".savedLocationNotice").style.display="none";
-        document.getElementById("loader3").style.display="block";
         document.querySelector(".search-location-list").style.display="none";
+        loader3.style.display="block";
 
         let id_value = [...JSON.parse(localStorage.getItem("id"))];
         let getWeatherInfo = "";
@@ -163,11 +162,9 @@ async function displaySearchWeather(){
 
         }
         
-        document.querySelector(".loader-and-notice").style.display="none";
-        document.getElementById("loader3").style.display="none";
-
-        document.querySelector(".search-location-list").innerHTML = getWeatherInfo;
+        loader3.style.display="none";
         document.querySelector(".search-location-list").style.display="block";
+        document.querySelector(".search-location-list").innerHTML = getWeatherInfo;
     }
 
 }
